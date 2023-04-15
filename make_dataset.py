@@ -2,8 +2,8 @@ from CannonBallisticFunctions import make_dataset, time_in_air, rough_pitch_esti
 import pickle
 
 if __name__ == "__main__":
-    res = make_dataset(7, 32, 512, 16, True, 100000)
-    with open("data", mode="wb") as file:
+    res = make_dataset(7, 32, 512, 4, True, 100000, 0.25)
+    with open("data025", mode="wb") as file:
         pickle.dump(res, file)
 
 import test

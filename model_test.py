@@ -4,7 +4,7 @@ import torch
 import pickle
 
 from prepare_data import prepare_data
-from test_model import Net
+from model import Net
 
 with open("data", mode="rb") as file:
     rdata = pickle.load(file)
