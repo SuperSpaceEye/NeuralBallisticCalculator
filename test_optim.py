@@ -6,7 +6,7 @@ from torchsummary import summary
 
 import pickle
 
-from test_model import Net
+from test import Net
 from prepare_data import prepare_data
 
 net = Net()
@@ -40,28 +40,28 @@ criterion = nn.MSELoss()
 
 mult = header["max_tried_pitch"]
 
-for epoch in range(epoches):
-    running_loss = 0.0
-    for i, data in enumerate(train_loader, 0):
-        # get the inputs; data is a list of [inputs, labels]
-        inputs, labels = data
-
-        # zero the parameter gradients
-        optimizer.zero_grad()
-
-        # forward + backward + optimize
-        outputs = net(inputs)
-        loss = criterion(outputs * mult, labels[:, 1].reshape(-1, 1) * mult)
-        loss.backward()
-        optimizer.step()
-
-        # print statistics
-        running_loss += loss.item()
-        if i % 2000 == 1999:    # print every 2000 mini-batches
-            print(f'[{epoch + 1}, {i + 1:5d}] loss: {running_loss / 2000:.5f}')
-            running_loss = 0.0
-
-torch.save(net.state_dict(), "test_model2")
+# for epoch in range(epoches):
+#     running_loss = 0.0
+#     for i, data in enumerate(train_loader, 0):
+#         # get the inputs; data is a list of [inputs, labels]
+#         inputs, labels = data
+#
+#         # zero the parameter gradients
+#         optimizer.zero_grad()
+#
+#         # forward + backward + optimize
+#         outputs = net(inputs)
+#         loss = criterion(outputs * mult, labels[:, 1].reshape(-1, 1) * mult)
+#         loss.backward()
+#         optimizer.step()
+#
+#         # print statistics
+#         running_loss += loss.item()
+#         if i % 2000 == 1999:    # print every 2000 mini-batches
+#             print(f'[{epoch + 1}, {i + 1:5d}] loss: {running_loss / 2000:.5f}')
+#             running_loss = 0.0
+#
+# torch.save(net.state_dict(), "test_model2")
 
 train_dataset = torch.utils.data.TensorDataset(inputs, labels)
 train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=1, shuffle=False)
