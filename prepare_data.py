@@ -18,23 +18,25 @@ def prepare_data(data):
 
         height_difference = coords[1]
 
-        rad_angle = math.atan2(coords[1], coords[0]) / math.pi
+        # rad_angle = math.atan2(coords[1], coords[0]) / math.pi
 
-        inputs.append((distance, height_difference, coords[0], coords[1], rad_angle))
+        inputs.append((distance, height_difference,
+                       # coords[0], coords[1], rad_angle
+                      ))
 
         outputs.append(item[1])
 
     max_distance = max(inputs, key=lambda x: abs(x[0]))[0]
     max_height   = max(inputs, key=lambda x: abs(x[1]))[1]
-    max_x        = max(inputs, key=lambda x: abs(x[2]))[2]
-    max_y        = max(inputs, key=lambda x: abs(x[3]))[3]
-    max_rad      = max(inputs, key=lambda x: abs(x[4]))[4]
+    # max_x        = max(inputs, key=lambda x: abs(x[2]))[2]
+    # max_y        = max(inputs, key=lambda x: abs(x[3]))[3]
+    # max_rad      = max(inputs, key=lambda x: abs(x[4]))[4]
 
     inputs = [(it[0]/max_distance,
                it[1]/max_height,
-               it[2]/max_x,
-               it[3]/max_y,
-               it[4]/max_rad,
+               # it[2]/max_x,
+               # it[3]/max_y,
+               # it[4]/max_rad,
                ) for it in inputs]
 
     max_delta_t     = max(outputs, key=lambda x: abs(x[0]))[0]

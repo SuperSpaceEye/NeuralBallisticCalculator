@@ -2,7 +2,6 @@ import math
 import torch
 import os
 import numpy as np
-from torchmetrics import Accuracy
 try:
     from IPython.display import clear_output
 except:
@@ -76,7 +75,7 @@ def _evaluate_model(model,
                     dataloader,
                     loss_fn,
                     device=torch.device("cpu"),
-                    label_modif=1):
+                    ):
     model.eval()
 
     loss_array = []
@@ -87,7 +86,7 @@ def _evaluate_model(model,
             Y = Y.to(device)
             pred = model(X)
 
-            loss = loss_fn(pred*label_modif, Y*label_modif)
+            loss = loss_fn(pred, Y)
             loss_array.append(loss.item())
 
     return np.array(loss_array), np.average(loss_array)
@@ -101,7 +100,7 @@ def _epoch_train(model,
                  device=torch.device("cpu"),
                  update_every_n_batches=100,
                  conclusions=None,
-                 label_modif=1):
+                 ):
     model.train()
 
     # backprop loss, reconstruction loss, kld loss
@@ -113,7 +112,7 @@ def _epoch_train(model,
         Y = Y.to(device)
         # Compute prediction error
         pred = model(X)
-        loss = loss_fn(pred * label_modif, Y * label_modif)
+        loss = loss_fn(pred, Y)
 
         # Backpropagation
         optimizer.zero_grad()
@@ -150,7 +149,6 @@ def train_with_epoches(model,
                        device=torch.device("cpu"),
                        save_model_each_epoch=True,
                        model_name="Models\\MyModel",
-                       label_modif=1,
                        update_every_n_batches=100):
     conclusions = []
 
@@ -165,11 +163,11 @@ def train_with_epoches(model,
     model.to(device)
 
     for epoch in range(max_epoches):
-        training_loss = _epoch_train(model, train_dataloader, optimizer, epoch, loss_fn, device, update_every_n_batches, conclusions, label_modif)
+        training_loss = _epoch_train(model, train_dataloader, optimizer, epoch, loss_fn, device, update_every_n_batches, conclusions)
         epoched_training_loss_array.append(training_loss)
 
         if evaluate_dataloader is not None:
-            testing_loss, average_testing_loss = _evaluate_model(model, evaluate_dataloader, loss_fn, device, label_modif)
+            testing_loss, average_testing_loss = _evaluate_model(model, evaluate_dataloader, loss_fn, device)
             epoched_testing_loss_array.append(testing_loss)
             epoched_average_testing_loss.append(average_testing_loss)
 

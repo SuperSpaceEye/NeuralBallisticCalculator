@@ -5,12 +5,14 @@ import torch.nn.functional as F
 from torchsummary import summary
 
 # layers = [100, 100, 100, 100, 100]
-layers = [32, 64, 128, 256, 256, 256, 256]
+layers = [32, 64, 128, 64, 128, 64, 128]
+num_inputs = 2
+num_outputs = 3
 
 class Net(nn.Module):
-    def __init__(self, batch_size=1):
+    def __init__(self):
         super(Net, self).__init__()
-        self.input_fc = nn.Linear(5, layers[0])
+        self.input_fc = nn.Linear(num_inputs, layers[0])
 
         self.layers = nn.ModuleList()
 
@@ -19,7 +21,7 @@ class Net(nn.Module):
             self.layers.append(nn.LazyLinear(width))
             self.layers.append(nn.SiLU())
 
-        self.fc_end = nn.LazyLinear(1)
+        self.fc_end = nn.LazyLinear(num_outputs)
 
     def forward(self, x):
         x = F.silu(self.input_fc(x))
@@ -31,5 +33,5 @@ class Net(nn.Module):
 
 
 if __name__ == "__main__":
-    net = Net(2048)
-    summary(net, (5,), 2048, "cpu")
+    net = Net()
+    summary(net, (2,), 32, "cpu")
